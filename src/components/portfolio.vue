@@ -2,9 +2,33 @@
     <div>
         <h1>Portfolio</h1>
         <hr>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores, aut autem, blanditiis consequuntur
-            dolore excepturi laborum maiores minima nihil non nulla obcaecati quas quibusdam quod sed suscipit vero
-            voluptatem.</p>
-
+        <div class="row">
+             <div class="col-sm-3"  v-for="(portfoliostock,index) in portfolio" :key="portfoliostock.id" @click="removeItem(index)" style="cursor: pointer">
+                <app-portfolio-stock v-model="portfolio[index]"></app-portfolio-stock>
+             </div>
+        </div>
     </div>
 </template>
+
+<script>
+    import PortfolioStock from './portfoliostock.vue';
+    import { mapGetters } from 'vuex';
+
+    export default {
+        data() {
+            return {
+            }
+        },
+        computed: {
+            ...mapGetters(['portfolio']),
+        },
+        methods: {
+            removeItem(index) {
+
+            },
+        },
+        components: {
+            appPortfolioStock: PortfolioStock
+        }
+    }
+</script>

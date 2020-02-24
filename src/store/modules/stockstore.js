@@ -32,12 +32,15 @@ const mutations = {
 
         console.log("addStockToPortfolio mutation", state.portfolio, state.bankAccount);
     },
-    removeStockFromPortfolio: (state, payload) => {
+    sellStockFromPortfolio: (state, payload) => {
         var indexOfItemToDelete = state.portfolio.findIndex(stock => stock.id === payload.id);
+        var stock = state.stocks[indexOfItemToDelete];
 
         if( indexOfItemToDelete > -1) {
             state.portfolio.splice(indexOfItemToDelete, 1);
         }
+
+        state.bankAccount += (stock.currentPrice * payload.qty);
     },
     initializeStocks: (state) => {
         // console.log("initializeStocks mutation");
@@ -59,8 +62,8 @@ const actions = {
     addStockToPortfolio: (context, payload) => {
         context.commit('addStockToPortfolio', payload);
     },
-    removeStockFromPortfolio: (context, payload) => {
-        context.commit('removeStockFromPortfolio', payload);
+    sellStockFromPortfolio: (context, payload) => {
+        context.commit('sellStockFromPortfolio', payload);
     },
     initializeStocks: (context) => {
         context.commit('initializeStocks');
