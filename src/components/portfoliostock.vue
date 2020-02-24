@@ -13,7 +13,7 @@
                 </form>
             </div>
             <div class="alert alert-danger" role="alert" v-if="alertVisible">
-                {{ alertMsg }}}}
+                {{ alertMsg }}
             </div>
         </div>
     </div>
@@ -33,7 +33,7 @@
         },
         computed: {
             currentPrice() {
-                return "Current price: $" + this.value.currentPrice.toFixed(2);
+                return `Current price: $${this.value.currentPrice.toFixed(2)}`;
             },
             qty() {
                 return "Qty: " + this.value.qty;

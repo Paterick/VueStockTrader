@@ -6,7 +6,7 @@
         <router-link tag="li" class="nav-item" active-class="active" to="/stocks"><a class="nav-link">Stocks</a></router-link>
         </ul>
         <ul class="nav justify-content-end">
-            <li class="nav-item"><a class="nav-link" href="#">End Day</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" @click="endTradingDay">End Day</a></li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Save & Load</a>
                 <div class="dropdown-menu">
@@ -22,6 +22,7 @@
 <script>
     import Stock from './stock.vue';
     import { mapGetters } from 'vuex';
+    import { mapActions } from 'vuex';
 
     export default {
         data() {
@@ -32,6 +33,7 @@
             ...mapGetters(['bankAccount']),
         },
         methods: {
+            ...mapActions(['endTradingDay']),
         }
     }
 </script>

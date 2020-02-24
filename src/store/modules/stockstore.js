@@ -22,7 +22,7 @@ const mutations = {
         var indexOfItemToAdd = state.portfolio.findIndex(stock => stock.id === payload.id);
 
         if( indexOfItemToAdd > -1) {
-            state.portfolio[indexOfItemToAdd].qty += payload.qty;
+            state.portfolio[indexOfItemToAdd].qty = state.portfolio[indexOfItemToAdd].qty + payload.qty;
         }
         else {
             state.portfolio.push(payload);
@@ -30,14 +30,22 @@ const mutations = {
 
         state.bankAccount -= (payload.currentPrice * payload.qty);
 
-        console.log("addStockToPortfolio mutation", state.portfolio, state.bankAccount);
+        console.log(`Added ${payload.qty} shares of ${payload.name} to portfolio.`, state.portfolio, state.bankAccount);
     },
     sellStockFromPortfolio: (state, payload) => {
-        var indexOfItemToDelete = state.portfolio.findIndex(stock => stock.id === payload.id);
-        var stock = state.stocks[indexOfItemToDelete];
+        var indexOfPortfolioItem = state.portfolio.findIndex(stock => stock.id === payload.id);
+        var indexOfStock= state.stocks.findIndex(stock => stock.id === payload.id);
+        var stock = state.stocks[indexOfStock];
+        var portfolioStock = state.portfolio[indexOfPortfolioItem];
 
-        if( indexOfItemToDelete > -1) {
-            state.portfolio.splice(indexOfItemToDelete, 1);
+        console.log(`Selling ${payload.qty} shares of ${payload.name} and portfolio has ${portfolioStock.qty} available to sell.`);
+
+        if( indexOfPortfolioItem > -1 && portfolioStock.qty === payload.qty) {
+
+            state.portfolio.splice(indexOfPortfolioItem, 1);
+        }
+        else {
+            portfolioStock.qty -= payload.qty;
         }
 
         state.bankAccount += (stock.currentPrice * payload.qty);
@@ -45,11 +53,16 @@ const mutations = {
     initializeStocks: (state) => {
         // console.log("initializeStocks mutation");
         state.stocks =  [
-            {id: 100,name: 'Microsoft', currentPrice: 76.54, ticker: 'MSFT', qty: 0},
-            {id: 101,name: 'IBM', currentPrice: 60.00, ticker: 'IBM', qty: 0},
-            {id: 102,name: 'Apple', currentPrice: 300, ticker: 'APPL', qty: 0},
-            {id: 103,name: 'Tesla', currentPrice: 732.22, ticker: 'TSLA', qty: 0},
-            {id: 104,name: 'Bitcoin', currentPrice: 8543.34, ticker: 'BTCN', qty: 0}];
+            {id: 100,name: 'Microsoft', currentPrice: 76.54, ticker: 'MSFT', qty: 0, volitility: .1},
+            {id: 101,name: 'IBM', currentPrice: 60.00, ticker: 'IBM', qty: 0, volitility: .1},
+            {id: 102,name: 'Apple', currentPrice: 300, ticker: 'APPL', qty: 0, volitility: .2},
+            {id: 103,name: 'Tesla', currentPrice: 732.22, ticker: 'TSLA', qty: 0, volitility: .3},
+            {id: 104,name: 'Bitcoin', currentPrice: 8543.34, ticker: 'BTCN', qty: 0, volitility: .5}];
+    },
+    endTradingDay: (state) => {
+        state.stocks.forEach((stock) => {
+            stock.currentPrice = helpers.calculateStockPrice(stock.currentPrice, stock.volitility);
+         });
     }
 };
 
@@ -68,21 +81,25 @@ const actions = {
     initializeStocks: (context) => {
         context.commit('initializeStocks');
     },
-    asyncIncrement: (context, payload) => {
-        setTimeout(() => {
-            context.commit('increment', payload.by);
-        }, payload.duration);
-    },
-    asyncDecrement: (context, payload) => {
-        setTimeout(() => {
-            context.commit('decrement', payload.by);
-        }, payload.duration);
+    endTradingDay: (context) => {
+        context.commit('endTradingDay');
     }
 };
+
+const helpers = {
+    calculateStockPrice: (price, range) => {
+        var max = price + (price * range);
+        var min = price - (price * range);
+
+        const rndNumber = Math.round(Math.random() * (max - min)) + min;
+        return rndNumber;
+    }
+}
 
 export default {
     state: state,
     getters: getters,
     mutations: mutations,
-    actions: actions
+    actions: actions,
+    helpers: helpers
 }
