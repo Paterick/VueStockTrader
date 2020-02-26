@@ -29,13 +29,18 @@
         computed: {
             currentPrice() {
                 return "Current price: $" + this.value.currentPrice.toFixed(2);
-            }
+            },
+            
         },
         methods: {
             ...mapActions(['addStockToPortfolio']),
             buyStock(qty) {
-                this.value.qty = qty;
-                this.addStockToPortfolio(this.value);
+                var stockToBuy = {
+                    qty: qty,
+                    id: this.value.id
+                }
+
+                this.addStockToPortfolio(stockToBuy);
             },
         }
     }

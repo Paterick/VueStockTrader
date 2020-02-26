@@ -14,41 +14,48 @@ const getters = {
     },
     portfolio: (state) => {
         return state.portfolio;
-    },    
+    },
+    stock: (state, id) => {
+        var indexOfStock = state.stocks.findIndex(stock => stock.id === id);
+        return state.stocks[indexOfStock];
+    },
+    portfolioStock: (state, id) => {
+        var indexOfPortfolioStock = state.portfolio.findIndex(stock => stock.id === id);
+        return state.portfolio[indexOfPortfolioStock];
+    }    
 };
 
 const mutations = {
     addStockToPortfolio: (state, payload) => {
-        var indexOfItemToAdd = state.portfolio.findIndex(stock => stock.id === payload.id);
+        var portfolioStock = getters.portfolioStock(state, payload.id);
+        var stockToAdd = getters.stock(state, payload.id);
 
-        if( indexOfItemToAdd > -1) {
-            state.portfolio[indexOfItemToAdd].qty = state.portfolio[indexOfItemToAdd].qty + payload.qty;
+        if( portfolioStock != null) {
+            portfolioStock.qty = parseInt(portfolioStock.qty) + parseInt(payload.qty);
         }
         else {
-            state.portfolio.push(payload);
+            state.portfolio.push({id: payload.id,  qty: parseInt(payload.qty)});
         }
 
-        state.bankAccount -= (payload.currentPrice * payload.qty);
+        state.bankAccount -= (stockToAdd.currentPrice * payload.qty);
 
-        console.log(`Added ${payload.qty} shares of ${payload.name} to portfolio.`, state.portfolio, state.bankAccount);
+        console.log(`Added ${payload.qty} shares of ${stockToAdd.name} to portfolio.`, state.portfolio, state.bankAccount);
     },
     sellStockFromPortfolio: (state, payload) => {
-        var indexOfPortfolioItem = state.portfolio.findIndex(stock => stock.id === payload.id);
-        var indexOfStock= state.stocks.findIndex(stock => stock.id === payload.id);
-        var stock = state.stocks[indexOfStock];
-        var portfolioStock = state.portfolio[indexOfPortfolioItem];
+        var portfolioStock = getters.portfolioStock(state, payload.id);
+        var stockToSell = getters.stock(state, payload.id);
 
-        console.log(`Selling ${payload.qty} shares of ${payload.name} and portfolio has ${portfolioStock.qty} available to sell.`);
+        console.log(`Selling ${payload.qty} shares of ${stockToSell.name} and portfolio has ${portfolioStock.qty} available to sell.`);
 
-        if( indexOfPortfolioItem > -1 && portfolioStock.qty === payload.qty) {
-
-            state.portfolio.splice(indexOfPortfolioItem, 1);
+        if( portfolioStock != null && portfolioStock.qty === payload.qty) {
+            var indexOfPortfolioStock = state.portfolio.findIndex(stock => stock.id === payload.id);
+            state.portfolio.splice(indexOfPortfolioStock, 1);
         }
         else {
-            portfolioStock.qty -= payload.qty;
+            portfolioStock.qty -= parseInt(payload.qty);
         }
 
-        state.bankAccount += (stock.currentPrice * payload.qty);
+        state.bankAccount += (stockToSell.currentPrice * payload.qty);
     },
     initializeStocks: (state) => {
         // console.log("initializeStocks mutation");
@@ -88,8 +95,8 @@ const actions = {
 
 const helpers = {
     calculateStockPrice: (price, range) => {
-        var max = price + (price * range);
-        var min = price - (price * range);
+        var max = price + (price * (range*1.2));
+        var min = price - (price * (range*.8));
 
         const rndNumber = Math.round(Math.random() * (max - min)) + min;
         return rndNumber;

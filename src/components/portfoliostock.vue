@@ -1,8 +1,8 @@
 <template>
     <div class="card" style="width: 18rem;">
         <div class="card-body">
-            <h5 class="card-title">{{ value.name }} ( {{value.ticker}} )</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{ currentPrice }} | {{ qty }}</h6>
+            <h5 class="card-title">{{ stock.name }} ( {{stock.ticker}} )</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ stock.currentPrice }} | {{ qty }}</h6>
             <hr>
             <div class="row">
                 <form>
@@ -21,6 +21,7 @@
 
 <script>
     import { mapActions } from 'vuex';
+    import { mapGetters } from 'vuex';
 
     export default {
         props: ['value'],
@@ -32,12 +33,17 @@
             }
         },
         computed: {
+            ...mapGetters(['stocks']),
             currentPrice() {
                 return `Current price: $${this.value.currentPrice.toFixed(2)}`;
             },
             qty() {
                 return "Qty: " + this.value.qty;
-            },            
+            },
+            stock() {
+                var indexOfStock = this.stocks.findIndex(stock => stock.id === this.value.id);
+                return this.stocks[indexOfStock];
+            }
         },
         methods: {
             ...mapActions(['sellStockFromPortfolio']),
@@ -51,8 +57,12 @@
                     return;
                 }
 
-                this.value.qty = qty;
-                this.sellStockFromPortfolio(this.value);
+                var stockToSell = {
+                    qty: qty,
+                    id: this.value.id
+                }
+
+                this.sellStockFromPortfolio(stockToSell);
             },
         }
     }
