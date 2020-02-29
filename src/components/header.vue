@@ -24,7 +24,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <span class="navbar-text">Funds: {{formattedAccountBalance}}</span>    
+                <span class="navbar-text"><b> Funds: {{formattedAccountBalance}} </b></span>    
             </li>
         </ul>
     </div>
