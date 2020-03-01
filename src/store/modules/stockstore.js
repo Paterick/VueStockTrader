@@ -4,6 +4,8 @@ const state = {
     bankAccount: 10000,
 };
 
+const storageId = "VueStockTrader";
+
 const getters = {
     bankAccount: (state) => {
         return state.bankAccount;
@@ -47,12 +49,12 @@ const mutations = {
 
         console.log(`Selling ${payload.qty} shares of ${stockToSell.name} and portfolio has ${portfolioStock.qty} available to sell.`);
 
-        if( portfolioStock != null && portfolioStock.qty === payload.qty) {
+        portfolioStock.qty -= parseInt(payload.qty);
+
+        if( portfolioStock.qty === 0) {
             var indexOfPortfolioStock = state.portfolio.findIndex(stock => stock.id === payload.id);
             state.portfolio.splice(indexOfPortfolioStock, 1);
-        }
-        else {
-            portfolioStock.qty -= parseInt(payload.qty);
+            console.log(`All shares of ${stockToSell.name} have been sold. Removing stock from portfolio.`);
         }
 
         state.bankAccount += (stockToSell.currentPrice * payload.qty);
@@ -70,7 +72,17 @@ const mutations = {
         state.stocks.forEach((stock) => {
             stock.currentPrice = helpers.calculateStockPrice(stock.currentPrice, stock.volitility);
          });
-    }
+    },
+    save: (state) => {
+        localStorage.setItem(storageId, JSON.stringify(state));
+    },
+    load: (state) => {
+        var savedState = JSON.parse(localStorage.getItem(storageId));
+        
+        state.bankAccount = savedState.bankAccount;
+        state.stocks = savedState.stocks;
+        state.portfolio = savedState.portfolio;
+    },
 };
 
 const actions = {
@@ -90,7 +102,13 @@ const actions = {
     },
     endTradingDay: (context) => {
         context.commit('endTradingDay');
-    }
+    },
+    save: (context) => {
+        context.commit('save');
+    },
+    load: (context) => {
+        context.commit('load');
+    }    
 };
 
 const helpers = {

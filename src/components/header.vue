@@ -19,8 +19,8 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Save & Load</a>
                 <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Save Data</a>
-                <a class="dropdown-item" href="#">Load Data</a>
+                <a class="dropdown-item" href="#" @click="save">Save Data</a>
+                <a class="dropdown-item" href="#" @click="load">Load Data</a>
                 </div>
             </li>
             <li class="nav-item">
@@ -54,7 +54,7 @@
         },
         
         methods: {
-            ...mapActions(['endTradingDay']),
+            ...mapActions(['endTradingDay', 'save', 'load']),
         }
     }
 </script>
