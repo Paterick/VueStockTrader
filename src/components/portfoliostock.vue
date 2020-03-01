@@ -1,13 +1,14 @@
 <template>
-    <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 15rem;">
         <div class="card-body">
             <h5 class="card-title">{{ stock.name }} ( {{stock.ticker}} )</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{ currentPrice }} | {{ qty }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{ currentPrice }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{ qty }}</h6>
             <hr>
             <div class="row">
                 <form>
-                    <div class="col-sm-8 col-sm-offset-2 col-xs-12 col-md-6 col-md-offset-3 input-group">
-                        <input type="text" class="form-control" v-model="numShares" />
+                    <div class="input-group">
+                        <input type="text" class="form-control" v-model="numShares" style="width: 8rem;" />
                         <button class="btn btn-danger" @click.prevent="sellStock(numShares)">Sell</button>
                     </div>
                 </form>

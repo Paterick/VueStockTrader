@@ -3,7 +3,7 @@
         <h1>Portfolio</h1>
         <hr>
         <div class="row">
-             <div class="col-sm-3"  v-for="(portfoliostock,index) in portfolio" :key="portfoliostock.id" @click="removeItem(index)" style="cursor: pointer">
+             <div class="col-sm-3 card-row"  v-for="(portfoliostock,index) in portfolio" :key="portfoliostock.id" @click="removeItem(index)">
                 <app-portfolio-stock v-model="portfolio[index]"></app-portfolio-stock>
              </div>
         </div>
@@ -32,3 +32,10 @@
         }
     }
 </script>
+
+<style>
+    .card-row {
+        cursor: pointer;
+        padding-bottom: 40px;
+    }
+</style>

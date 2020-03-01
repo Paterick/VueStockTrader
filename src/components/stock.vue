@@ -1,13 +1,13 @@
 <template>
-    <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 15rem;">
         <div class="card-body">
             <h5 class="card-title">{{ value.name }} ( {{value.ticker}} )</h5>
             <h6 class="card-subtitle mb-2 text-muted">{{ currentPrice }}</h6>
             <hr>
             <div class="row">
                 <form>
-                    <div class="col-sm-8 col-sm-offset-2 col-xs-12 col-md-6 col-md-offset-3 input-group">
-                        <input type="text" class="form-control" v-model="numShares" />
+                    <div class="input-group">
+                        <input type="text" class="form-control" v-model="numShares"  style="width: 8rem;" />
                         <button class="btn btn-primary" @click.prevent="buyStock(numShares)">Buy</button>
                     </div>
                 </form>
@@ -52,9 +52,5 @@
 </script>
 
 <style>
-    .card-border {
-        border: 1px solid rgba(0, 0, 0, .125);
-        border-radius: .25 rem;
-        padding: 5 rem;
-    }
+
 </style>
