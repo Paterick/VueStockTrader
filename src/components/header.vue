@@ -58,3 +58,11 @@
         }
     }
 </script>
+
+<style>
+    .active {
+        background-color: lightgray;
+        font-weight: bold;
+        color: black;
+    }
+</style>

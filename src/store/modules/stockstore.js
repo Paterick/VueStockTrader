@@ -11,19 +11,16 @@ const getters = {
         return state.bankAccount;
     },
     stocks: (state) => {
-        // console.log("stocks getter", state.stocks);
         return state.stocks;
     },
     portfolio: (state) => {
         return state.portfolio;
     },
     stock: (state, id) => {
-        var indexOfStock = state.stocks.findIndex(stock => stock.id === id);
-        return state.stocks[indexOfStock];
+        return state.stocks.find(stock => stock.id === id);
     },
     portfolioStock: (state, id) => {
-        var indexOfPortfolioStock = state.portfolio.findIndex(stock => stock.id === id);
-        return state.portfolio[indexOfPortfolioStock];
+        return state.portfolio.find(stock => stock.id === id);
     }    
 };
 
@@ -52,15 +49,14 @@ const mutations = {
         portfolioStock.qty -= parseInt(payload.qty);
 
         if( portfolioStock.qty === 0) {
-            var indexOfPortfolioStock = state.portfolio.findIndex(stock => stock.id === payload.id);
-            state.portfolio.splice(indexOfPortfolioStock, 1);
+            state.portfolio.splice(state.portfolio.indexOf(portfolioStock), 1);
             console.log(`All shares of ${stockToSell.name} have been sold. Removing stock from portfolio.`);
         }
 
         state.bankAccount += (stockToSell.currentPrice * payload.qty);
     },
     initializeStocks: (state) => {
-        // console.log("initializeStocks mutation");
+
         state.stocks =  [
             {id: 100,name: 'Microsoft', currentPrice: 76.54, ticker: 'MSFT', qty: 0, volitility: .1},
             {id: 101,name: 'IBM', currentPrice: 60.00, ticker: 'IBM', qty: 0, volitility: .1},

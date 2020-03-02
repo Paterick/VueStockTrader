@@ -4,8 +4,8 @@
         <hr>
         <div class="row">
              <div class="col-sm-3 card-row"  v-for="(stock,index) in stocks" :key="stock.id" @click="removeItem(index)">
-                <app-stock v-model="stocks[index]"></app-stock>
-             </div>
+                <app-stock :stock="stock"></app-stock>
+             </div>            
         </div>
     </div>
 </template>

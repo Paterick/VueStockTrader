@@ -6,15 +6,15 @@
             <h6 class="card-subtitle mb-2 text-muted">{{ qty }}</h6>
             <hr>
             <div class="row">
-                <form>
-                    <div class="input-group">
-                        <input type="text" class="form-control" v-model="numShares" style="width: 8rem;" />
-                        <button class="btn btn-danger" @click.prevent="sellStock(numShares)">Sell</button>
-                    </div>
-                </form>
+                <div class="input-group">
+                    <input type="text" class="form-control input-margin" placeholder="Quantity" v-model="numShares" />
+                    <button class="btn btn-danger" @click.prevent="sellStock" :disabled="numShares <= 0 || !Number.isInteger(parseInt(numShares))">Sell</button>
+                </div>
             </div>
-            <div class="alert alert-danger" role="alert" v-if="alertVisible">
-                {{ alertMsg }}
+            <div class="row">
+                <div class="alert alert-danger message-margin" role="alert" v-if="alertVisible">
+                    {{ alertMsg }}
+                </div>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
     import { mapGetters } from 'vuex';
 
     export default {
-        props: ['value'],
+        props: ['portfoliostock'],
         data() {
             return {
                 numShares: 0,
@@ -44,32 +44,42 @@
                 return "Current price: " + formatter.format(this.stock.currentPrice);
             },
             qty() {
-                return "Qty: " + this.value.qty;
+                return "Qty: " + this.portfoliostock.qty;
             },
             stock() {
-                var indexOfStock = this.stocks.findIndex(stock => stock.id === this.value.id);
+                var indexOfStock = this.stocks.findIndex(stock => stock.id === this.portfoliostock.id);
                 return this.stocks[indexOfStock];
             }
         },
         methods: {
             ...mapActions(['sellStockFromPortfolio']),
-            sellStock(qty) {
+            sellStock() {
                 this.alertMsg = '';
                 this.alertVisible = false;
 
-                if( qty > this.value.qty ) {
-                    this.alertMsg = 'You do not have ' + qty + " shares to sell.";
+                if( this.numShares > this.portfoliostock.qty ) {
+                    this.alertMsg = 'You do not have ' + this.numShares + " shares to sell.";
                     this.alertVisible = true;
                     return;
                 }
 
                 var stockToSell = {
-                    qty: qty,
-                    id: this.value.id
+                    qty: this.numShares,
+                    id: this.portfoliostock.id
                 }
 
                 this.sellStockFromPortfolio(stockToSell);
+                this.numShares = 0;
             },
         }
     }
 </script>
+
+<style>
+    .input-margin {
+        margin-right: 7px;
+    }
+    .message-margin {
+        margin-top: 7px;
+    }    
+</style>
