@@ -24,7 +24,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <span class="navbar-text"><b> Funds: {{formattedAccountBalance}} </b></span>    
+                <span class="navbar-text"><b> Funds: {{bankAccount | currency}} </b></span>    
             </li>
         </ul>
     </div>
@@ -43,14 +43,6 @@
         },
         computed: {
             ...mapGetters(['bankAccount']),
-            formattedAccountBalance() {
-                var formatter = new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    });
-
-                return formatter.format(this.bankAccount);
-            },
         },
         
         methods: {

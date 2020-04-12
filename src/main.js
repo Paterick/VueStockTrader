@@ -8,6 +8,15 @@ import { store } from './store/store.js'
 
 Vue.use(VueRouter);
 
+Vue.filter('currency', (value) => {
+  var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    });
+
+    return formatter.format(value);  
+});
+
 const router = new VueRouter({
   routes: routes,
   mode: 'history',

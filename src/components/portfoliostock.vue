@@ -2,8 +2,8 @@
     <div class="card" style="width: 15rem;">
         <div class="card-body">
             <h5 class="card-title">{{ stock.name }} ( {{stock.ticker}} )</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{ currentPrice }}</h6>
-            <h6 class="card-subtitle mb-2 text-muted">{{ qty }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Current Price: {{ stock.currentPrice | currency }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Qty: {{ portfoliostock.qty }}</h6>
             <hr>
             <div class="row">
                 <div class="input-group">
@@ -35,17 +35,6 @@
         },
         computed: {
             ...mapGetters(['stocks']),
-            currentPrice() {
-                var formatter = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                });
-
-                return "Current price: " + formatter.format(this.stock.currentPrice);
-            },
-            qty() {
-                return "Qty: " + this.portfoliostock.qty;
-            },
             stock() {
                 var indexOfStock = this.stocks.findIndex(stock => stock.id === this.portfoliostock.id);
                 return this.stocks[indexOfStock];

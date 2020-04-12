@@ -2,7 +2,7 @@
     <div class="card" style="width: 17rem;">
         <div class="card-body">
             <h5 class="card-title">{{ stock.name }} ( {{stock.ticker}} )</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{ currentPrice }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{ stock.currentPrice | currency }}</h6>
             <hr>
             <div class="row">
                 <div class="input-group">
@@ -11,7 +11,7 @@
                         Insufficient Funds
                     </div>
                     <div class="valid-feedback">
-                        {{requiredFunds}}
+                        Total: {{requiredFunds | currency}}
                     </div>                    
                     <button class="btn btn-primary" @click.prevent="buyStock" :disabled="insufficientFunds || numShares <= 0 || !Number.isInteger(parseInt(numShares))">{{insufficientFunds ? 'Insufficient Funds' : 'Buy'}}</button>
                 </div>
@@ -37,22 +37,8 @@
                 return this.numShares * this.stock.currentPrice > this.bankAccount;
             },
             requiredFunds() {
-                var formatter = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                });
-
-                return "Total: " + formatter.format(this.numShares * this.stock.currentPrice);
-            },
-            currentPrice() {
-                var formatter = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                });
-
-                return "Current price: " + formatter.format(this.stock.currentPrice);
-            },
-            
+                return this.numShares * this.stock.currentPrice;
+            },            
         },
         methods: {
             ...mapActions(['addStockToPortfolio']),
