@@ -114,6 +114,14 @@ const helpers = {
 
         const rndNumber = Math.round(Math.random() * (max - min)) + min;
         return rndNumber;
+    },
+    formatCurrency: (amount) => {
+        var formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            });
+
+        return formatter.format(amount);
     }
 }
 
