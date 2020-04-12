@@ -3,7 +3,7 @@
 // import UserStart from './components/user/UserStart.vue'
 // import UserEdit from './components/user/UserEdit.vue'
 // import UserDetail from './components/user/UserDetail.vue'
-import Header from './components/Header.vue'
+import Header from './components/header.vue'
 import StockTrader from './components/StockTrader.vue';
 import Portfolio from './components/Portfolio.vue';
 import Stocks from './components/Stocks.vue';
