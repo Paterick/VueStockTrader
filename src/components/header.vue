@@ -19,7 +19,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Save & Load</a>
                 <div class="dropdown-menu">
-                <a class="dropdown-item" href="#" @click="save">Save Data</a>
+                <a class="dropdown-item" href="#" @click="saveData">Save Data</a>
                 <a class="dropdown-item" href="#" @click="load">Load Data</a>
                 </div>
             </li>
@@ -42,11 +42,21 @@
             }
         },
         computed: {
-            ...mapGetters(['bankAccount']),
+            ...mapGetters(['bankAccount', 'stocks', 'portfolio']),
         },
         
         methods: {
             ...mapActions(['endTradingDay', 'save', 'load']),
+            saveData() {
+                const data = {
+                    bankAccount: this.bankAccount,
+                    stocks: this.stocks,
+                    portfolio: this.portfolio
+                }
+
+                this.$http.put('data.json', data);
+                // this.save();
+            }
         }
     }
 </script>

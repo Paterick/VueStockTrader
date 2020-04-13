@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 const state = {
     stocks: [],
     portfolio: [],
@@ -73,11 +75,14 @@ const mutations = {
         localStorage.setItem(storageId, JSON.stringify(state));
     },
     load: (state) => {
-        var savedState = JSON.parse(localStorage.getItem(storageId));
-        
-        state.bankAccount = savedState.bankAccount;
-        state.stocks = savedState.stocks;
-        state.portfolio = savedState.portfolio;
+        Vue.http.get('data.json')
+            .then(savedState => savedState.json())
+            .then(extractedState => {
+                if( !extractedState) {return ;}
+                    state.bankAccount = extractedState.bankAccount;
+                    state.stocks = extractedState.stocks;
+                    state.portfolio = extractedState.portfolio;                
+            });
     },
 };
 
@@ -114,14 +119,6 @@ const helpers = {
 
         const rndNumber = Math.round(Math.random() * (max - min)) + min;
         return rndNumber;
-    },
-    formatCurrency: (amount) => {
-        var formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            });
-
-        return formatter.format(amount);
     }
 }
 
